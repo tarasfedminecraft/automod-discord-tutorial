@@ -1,199 +1,330 @@
-<!doctype html>
-<html lang="uk" dir="ltr">
+<!DOCTYPE html>
+<html lang="uk">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Туторіал: AutoMod — Налаштування і Поради</title>
-  <meta name="description" content="Короткий, практичний туторіал з налаштування AutoMod для модерації серверів Discord.">
-  <style>
-    :root{
-      --bg:#0f1724; --card:#0b1220; --accent:#5865f2; --muted:#9aa6c7; --glass: rgba(255,255,255,0.03);
-      --maxw:900px;
-      color-scheme: dark;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071029 0%, #081225 100%);color:#e6eef6;}
-    .wrap{max-width:var(--maxw);margin:28px auto;padding:28px;background:linear-gradient(180deg,rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;box-shadow:0 6px 30px rgba(2,6,23,0.6);}
-    header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
-    .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#3b3ee8);display:flex;align-items:center;justify-content:center;font-weight:700}
-    h1{font-size:20px;margin:0}
-    p.lead{color:var(--muted);margin:6px 0 18px}
-    nav.toc{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
-    .toc a{background:var(--glass);padding:8px 12px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14px}
-    main{display:grid;grid-template-columns:1fr 280px;gap:20px}
-    article{padding-right:6px}
-    .card{background:#071226;padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 4px 20px rgba(7,18,38,0.6)}
-    section{margin-bottom:18px}
-    h2{font-size:16px;margin:0 0 10px}
-    ul{margin:8px 0 12px 20px;color:var(--muted)}
-    pre{background:#05111a;padding:12px;border-radius:8px;overflow:auto;color:#cfe9ff;font-size:13px}
-    .example{display:flex;gap:8px;align-items:flex-start}
-    button.copy{background:var(--accent);border:none;color:white;padding:6px 10px;border-radius:8px;cursor:pointer}
-    aside{position:sticky;top:20px;align-self:start}
-    .hint{background:linear-gradient(90deg, rgba(88,101,242,0.12), rgba(60,210,150,0.06));padding:10px;border-radius:8px;color:var(--muted);font-size:14px}
-    .small{font-size:13px;color:var(--muted)}
-    footer{margin-top:14px;color:var(--muted);font-size:13px;text-align:center}
-    @media(max-width:900px){main{grid-template-columns:1fr} aside{position:static;margin-top:10px}}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoMod: Поширені запитання (FAQ)</title>
+    <style>
+        /* --- Основні стилі (Discord-like Theme) --- */
+        :root {
+            --bg-primary: #313338;
+            --bg-secondary: #2b2d31;
+            --bg-tertiary: #1e1f22;
+            --text-normal: #dbdee1;
+            --text-header: #f2f3f5;
+            --accent: #5865F2;
+            --accent-hover: #4752c4;
+            --divider: #3f4147;
+            --danger: #da373c;
+            --success: #23a559;
+            --code-bg: #1e1f22;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'gg sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-normal);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 20px;
+        }
+
+        /* --- Навігація (Sidebar) --- */
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .sidebar h3 {
+            color: var(--text-header);
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 10px;
+            padding-left: 10px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 8px 12px;
+            color: var(--text-normal);
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .nav-link:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--text-header);
+        }
+
+        .nav-link.active {
+            background-color: var(--accent); /* Стиль з референсу */
+            color: white;
+        }
+
+        /* --- Основний контент --- */
+        .content {
+            background-color: var(--bg-primary);
+        }
+
+        .header-section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--divider);
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: var(--text-header);
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: var(--text-header);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        /* --- Картки та інформаційні блоки --- */
+        .info-card {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .info-card.warning {
+            border-left-color: var(--danger);
+        }
+
+        .info-card h4 {
+            color: var(--text-header);
+            margin-bottom: 8px;
+        }
+
+        /* --- Стилізація коду та термінів --- */
+        code {
+            background-color: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: var(--text-header);
+            font-size: 0.9em;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* --- Інтуїтивні елементи (Details/Summary) --- */
+        details {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        summary {
+            padding: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-header);
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        summary:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        summary::after {
+            content: '+';
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        details[open] summary::after {
+            content: '-';
+        }
+
+        .details-content {
+            padding: 16px;
+            border-top: 1px solid var(--divider);
+            color: var(--text-normal);
+        }
+
+        /* --- Адаптивність --- */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none; /* На мобільному ховаємо сайдбар для простоти */
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="logo">AM</div>
-      <div>
-        <h1>Туторіал — AutoMod: швидко й без лишнього драматизму</h1>
-        <p class="lead">Короткі пояснення, приклади правил і готові фрагменти для вставки — щоб ваш сервер був охайніший, ніж більшість інтернетів.</p>
-      </div>
-    </header>
 
-    <nav class="toc">
-      <a href="#what">Що таке AutoMod</a>
-      <a href="#keywords">Keyword Filters</a>
-      <a href="#spam">Spam Filters</a>
-      <a href="#usernames">Блокування в нікнеймах</a>
-      <a href="#examples">Приклади правил</a>
-    </nav>
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Зміст</h3>
+            <a href="#intro" class="nav-link active">Що таке AutoMod?</a>
+            <a href="#keywords" class="nav-link">Фільтри ключових слів</a>
+            <a href="#wildcards" class="nav-link">Підстановочні знаки (*)</a>
+            <a href="#regex" class="nav-link">Регулярні вирази</a>
+            <a href="#actions" class="nav-link">Дії та Тайм-аути</a>
+        </aside>
 
-    <main>
-      <article>
-        <section id="what" class="card">
-          <h2>1. Що таке AutoMod</h2>
-          <p class="small">AutoMod — вбудований набір фільтрів для автоматичної модерації повідомлень: ключові слова, спам, масові згадки та ін. Працює по всіх текстових поверхнях (канали, треди, текст у голосових).</p>
-          <div style="margin-top:10px" class="hint">
-            Порада: поєднуйте готові списки (Commonly Flagged Words) і власні правила — так у вас буде баланс між автоматизацією і культурою спільноти.
-          </div>
-        </section>
+        <main class="content">
+            <section id="intro" class="header-section">
+                <h1>AutoMod: Часті запитання</h1>
+                <p>Ми розуміємо, скільки зусиль потрібно модераторам для керування спільнотою. <strong>AutoMod</strong> — це інструмент, який дозволяє автоматично фільтрувати повідомлення, блокувати небажаний контент та керувати безпекою сервера без постійного ручного втручання.</p>
+                
+                <div class="info-card">
+                    <h4>👮 Хто може керувати AutoMod?</h4>
+                    <p>Для налаштування потрібне право: <code>Керувати сервером (Manage Server)</code> або <code>Адміністратор</code>.</p>
+                </div>
+            </section>
 
-        <section id="keywords" class="card">
-          <h2>2. Keyword Filters — як налаштувати</h2>
-          <ol class="small">
-            <li>Server Settings → AutoMod</li>
-            <li>Обрати Commonly Flagged Words або Custom Keyword Rule → Set up</li>
-            <li>Додати ключові слова/фрази або ексепти (exempt words)</li>
-            <li>Вибрати дію: Block message, Send alert, Timeout user (для кастомних правил)</li>
-          </ol>
+            <section id="keywords">
+                <h2>🚫 Фільтри ключових слів</h2>
+                <p>AutoMod дозволяє налаштувати різні типи правил для блокування слів:</p>
 
-          <p class="small"><strong>Wildcards</strong> — додавайте `*` на початку/наприкінці слова для префікс/суфікс/вбудованого пошуку (наприклад: `spam*`, `*bot`, `*ana*`).</p>
-        </section>
+                <details>
+                    <summary>Правило: Загальні слова для блокування</summary>
+                    <div class="details-content">
+                        <p>Використовуйте готові списки слів від Discord для захисту спільноти:</p>
+                        <ul>
+                            <li><strong>Образи та лайка:</strong> Захист від агресивної лексики.</li>
+                            <li><strong>Сексуальний контент:</strong> Фільтрація відвертих висловлювань.</li>
+                            <li><strong>Ненависть (Slurs):</strong> Блокування мови ворожнечі.</li>
+                        </ul>
+                    </div>
+                </details>
 
-        <section id="spam" class="card">
-          <h2>3. Spam Filters</h2>
-          <p class="small">Два основні режими: блокування спам-контенту (машинне навчання) і обмеження кількості згадок в повідомленні. Машинний фільтр неідеальний — повідомляйте про помилки, якщо бачите фальшпозитиви.</p>
-          <ul class="small">
-            <li>Block Spam Content — захищає від реклами та шахрайських посилань</li>
-            <li>Block Mention Spam — ставите ліміт згадок (max 1–50)</li>
-          </ul>
-        </section>
+                <details>
+                    <summary>Правило: Власні ключові слова</summary>
+                    <div class="details-content">
+                        <p>Ви можете додати власні слова, які специфічні для вашої спільноти. </p>
+                        <p><strong>Ліміти:</strong></p>
+                        <ul>
+                            <li>До 1000 слів у кожному власному правилі.</li>
+                            <li>Кожне слово/фраза до 60 символів (або 30 для Regex).</li>
+                        </ul>
+                    </div>
+                </details>
+            </section>
 
-        <section id="usernames" class="card">
-          <h2>4. Блокування слів у нікнеймах</h2>
-          <p class="small">Можна заборонити певні слова в server nicknames або username — користувачі повинні змінити нік, щоб писати в чаті.</p>
-          <ol class="small">
-            <li>Server Settings → Safety Setup → Edit AutoMod → Block Words in Member Profile Names</li>
-            <li>Додайте слова/фрази — якщо користувач не може змінити нік, йому доведеться змінити основне ім'я</li>
-          </ol>
-        </section>
+            <section id="wildcards">
+                <h2>✨ Символи підстановки (Wildcards)</h2>
+                <p>Ви можете використовувати символ <code>*</code> для гнучкого налаштування фільтрів. Це дозволяє ловити варіації слів.</p>
 
-        <section id="examples" class="card">
-          <h2>5. Готові приклади правил (скопіюй → встав) </h2>
+                <div class="info-card">
+                    <h4>Як це працює:</h4>
+                    <ul>
+                        <li><code>*собака</code> — заблокує "мійсобака", але пропустить "собакамій".</li>
+                        <li><code>собака*</code> — заблокує "собакамій", але пропустить "мійсобака".</li>
+                        <li><code>*собака*</code> — заблокує будь-яке слово, що містить "собака" (наприклад, "мійсобакадруг").</li>
+                    </ul>
+                </div>
+            </section>
 
-          <div style="margin-bottom:10px">
-            <div class="small" style="margin-bottom:6px">Приклад 1 — блокувати рекламу Nitro / безплатні плюшки (використовувати як Custom Keyword Rule)</div>
-            <div class="example">
-              <pre id="code1">free nitro
-free nitro code
-get nitro free
-nitro giveaway</pre>
-              <div style="display:flex;flex-direction:column;gap:6px">
-                <button class="copy" data-target="code1">Копіювати</button>
-              </div>
-            </div>
-          </div>
+            <section id="regex">
+                <h2>🤖 Регулярні вирази (Regex)</h2>
+                <p>Для просунутих користувачів AutoMod підтримує регулярні вирази на основі синтаксису <strong>Rust regex crate</strong>.</p>
+                <p>Це дозволяє створювати складні патерни для фільтрації, які неможливо описати простими словами чи wildcard-ами.</p>
+                <div class="info-card warning">
+                    <h4>Важливо:</h4>
+                    <p>Regex доступні тільки у <strong>Власних правилах ключових слів</strong>. Невірний Regex може не спрацювати, тому тестуйте їх обережно.</p>
+                </div>
+            </section>
 
-          <div style="margin-bottom:10px">
-            <div class="small" style="margin-bottom:6px">Приклад 2 — wildcard для різних форм слова (наприклад, лайливі варіанти)</div>
-            <div class="example">
-              <pre id="code2">*****
-sh!t*
-badword*
-*slur*</pre>
-              <div style="display:flex;flex-direction:column;gap:6px">
-                <button class="copy" data-target="code2">Копіювати</button>
-              </div>
-            </div>
-          </div>
+            <section id="actions">
+                <h2>⚡ Дії при порушенні</h2>
+                <p>Коли AutoMod виявляє порушення, він може виконати одну з наступних дій:</p>
 
-          <div style="margin-top:8px" class="small">
-            Підказка: оберіть канал для сповіщень AutoMod, де тільки модератори бачитимуть попередження. Не робіть цей канал загальнодоступним, інакше нічого не допоможе.
-          </div>
-        </section>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                    <div style="background: var(--bg-tertiary); padding: 15px; border-radius: 8px;">
+                        <h4 style="color:var(--danger)">⛔ Блокування повідомлення</h4>
+                        <p style="font-size: 14px; margin-top:5px;">Повідомлення не буде надіслано в чат. Користувач може отримати сповіщення про помилку.</p>
+                    </div>
+                    
+                    <div style="background: var(--bg-tertiary); padding: 15px; border-radius: 8px;">
+                        <h4 style="color:var(--text-header)">🔔 Надіслати сповіщення</h4>
+                        <p style="font-size: 14px; margin-top:5px;">AutoMod надішле сповіщення у спеціальний текстовий канал для модераторів.</p>
+                    </div>
 
-        <section class="card">
-          <h2>6. Найпоширеніші помилки</h2>
-          <ul class="small">
-            <li>Не додають ексепти для нормальних слів — отримують фальшблоки.</li>
-            <li>Налаштування alert-каналу для всіх — модератори отримують тонни повідомлень.</li>
-            <li>Очікують ідеального ML — фільтр вчиться, тому ваша фідбек-крафт потрібен.</li>
-          </ul>
-        </section>
+                    <div style="background: var(--bg-tertiary); padding: 15px; border-radius: 8px;">
+                        <h4 style="color:var(--accent)">⏳ Тайм-аут (Timeout)</h4>
+                        <p style="font-size: 14px; margin-top:5px;">Користувач тимчасово втратить можливість писати повідомлення та приєднуватися до голосових каналів.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
 
-      </article>
+    <script>
+        // Простий скрипт для підсвічування активного пункту меню при скролі
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
 
-      <aside>
-        <div class="card">
-          <h2 class="small">Швидкий чекліст</h2>
-          <ol class="small">
-            <li>Community-enabled сервер</li>
-            <li>Зайти: Server Settings → AutoMod</li>
-            <li>Включити Commonly Flagged + додати Custom Rules</li>
-            <li>Налаштувати канал для сповіщень (модератори)</li>
-            <li>Переглянути й оновлювати список + надсилати звіти про помилки</li>
-          </ol>
-          <div style="height:10px"></div>
-          <div class="hint small">Ти можеш використовувати цей файл як посадкову сторінку для модераторів — або як швидку інструкцію в каналі #rules.</div>
-        </div>
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
 
-        <div style="height:12px"></div>
-
-        <div class="card">
-          <h2 class="small">Корисні поради</h2>
-          <ul class="small">
-            <li>Почни з щадного блокування, протестуй на невеликій групі.</li>
-            <li>Додай role-exempts для ботів і довірених модераторів.</li>
-            <li>Фільтри на нікнейми — радикальний крок, використовуйте обережно.</li>
-          </ul>
-        </div>
-      </aside>
-    </main>
-
-    <footer>
-      <div class="small">Збережи цей файл як <code>automod-tutorial.html</code> і відкрий у браузері. Якщо хочеш, можу переробити макет під твою серверну кольорову палітру (але тобі доведеться мене заслужити).</div>
-    </footer>
-  </div>
-
-  <script>
-    document.querySelectorAll('button.copy').forEach(btn=>{
-      btn.addEventListener('click', async ()=>{
-        const id = btn.getAttribute('data-target');
-        const txt = document.getElementById(id).innerText;
-        try{
-          await navigator.clipboard.writeText(txt);
-          btn.textContent = 'Скопійовано ✓';
-          setTimeout(()=>btn.textContent='Копіювати',1400);
-        }catch(e){
-          alert('Копіювання не спрацювало. Скопіюй вручну.');
-        }
-      });
-    });
-
-    // Smooth scroll for TOC links
-    document.querySelectorAll('nav.toc a').forEach(a=>{
-      a.addEventListener('click', e=>{
-        e.preventDefault();
-        const el = document.querySelector(a.getAttribute('href'));
-        if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
-      });
-    });
-  </script>
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
